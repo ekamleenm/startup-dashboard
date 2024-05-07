@@ -20,3 +20,4 @@ else:
     btn2 = st.sidebar.button('Investor Details')
     st.title("Investor Analysis")
 
+
