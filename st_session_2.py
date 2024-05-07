@@ -14,5 +14,3 @@ if btn:
     else:
         st.error('Login failed')
 
-
-# file uploader
