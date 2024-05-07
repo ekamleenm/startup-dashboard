@@ -1,7 +1,25 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
-import time
+
+email = st.text_input('Enter Email')
+password = st.text_input('Enter Password')
+gender = st.selectbox('Select Gender', ['m', 'f', 'other'])
+
+btn = st.button('Login Here')
+
+if btn:
+    if email == 'ekm9@sfu.ca' and password == '1234':
+        st.success('Login successful')
+        st.balloons()
+        st.write(gender)
+    else:
+        st.error('Login failed')
+
+file = st.file_uploader('Upload a csv File')
+
+if file is not None:
+    df = pd.read_csv(file)
+    st.dataframe(df.describe())
 
 st.title('Startup Dashboard')
 st.header('I am learning Streamlit')
@@ -57,9 +75,9 @@ x = foo(2)
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image('image2.jpeg')
+    st.image('#')
 with col2:
-    st.image('image2.jpeg')
+    st.image('#')
 
 # Showing status : Progress bar and Error message
 st.error('login Failed')
@@ -71,10 +89,8 @@ bar = st.progress(0)
 for i in range(100):
     bar.progress(i)
 
-
 # User input
 # text input
 email = st.text_input('enter email')
 number = st.number_input('enter age')
 date = st.date_input('enter date')
-
