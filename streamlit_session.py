@@ -68,9 +68,13 @@ st.info('this is info')
 st.warning('this is warning')
 
 bar = st.progress(0)
-for i in range(1,101):
-    time.sleep(0.1)
+for i in range(100):
     bar.progress(i)
 
 
 # User input
+# text input
+email = st.text_input('enter email')
+number = st.number_input('enter age')
+date = st.date_input('enter date')
+
