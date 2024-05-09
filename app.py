@@ -10,6 +10,18 @@ df['investors'] = df['investors'].fillna('Undisclosed')
 df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
 
+def load_overall_analysis():
+    st.title("Overall Analysis")
+
+    # total invested amount
+    total_amount = round(df['amount'].sum())
+    st.metric("Total Amount", str(total_amount) + ' Crs')
+
+#     Max Investment
+    max_amount = round(df['amount'].max())
+    st.metric("Max Investment Amount", str(max_amount) + ' Crs')
+
+
 def load_investor_details(investor_):
     st.title(selected_investor)
     #     recent 5 investments of investor
@@ -45,7 +57,10 @@ st.sidebar.title('Startup Funding Analysis')
 option = st.sidebar.selectbox('Select One', ['Overall Analysis', 'Startup', 'Investor'])
 
 if option == 'Overall Analysis':
-    st.title("Overall Analysis")
+    btn0 = st.sidebar.button('Overall Analysis')
+    if btn0:
+        load_overall_analysis()
+
 elif option == 'Startup':
     st.sidebar.selectbox('Select Startup', sorted(df['startup'].unique().tolist()))
     btn1 = st.sidebar.button('Startup Details')
