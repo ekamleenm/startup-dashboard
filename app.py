@@ -8,18 +8,34 @@ df = pd.read_csv('startup_cleaned.csv')
 # Data Cleaning -> Missing values should be taken care of:
 df['investors'] = df['investors'].fillna('Undisclosed')
 df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df['month'] = df['date'].dt.month
+df['year'] = df['date'].dt.year
 
 
 def load_overall_analysis():
     st.title("Overall Analysis")
-
+    col1, col2, col3 = st.columns(3)
     # total invested amount
-    total_amount = round(df['amount'].sum())
-    st.metric("Total Amount", str(total_amount) + ' Crs')
+    with col1:
+        total_amount = round(df['amount'].sum())
+        st.metric("Total Amount", str(total_amount) + ' Crs')
 
-#     Max Investment
-    max_amount = round(df['amount'].max())
-    st.metric("Max Investment Amount", str(max_amount) + ' Crs')
+    #     Max Investment made in a startup
+    with col2:
+        max_amount = df.groupby('startup')['amount'].max().sort_values(ascending=False).head(1).values[0]
+        st.metric("Max Investment Amount", str(max_amount) + ' Crs')
+
+    with col3:
+        avg_amount = round(df.groupby('startup')['amount'].sum().mean())
+        st.metric("Average Amount", str(avg_amount) + ' Crs')
+
+    st.header("MoM Graph")
+    temp_df = df.groupby(['year', 'month'])['amount'].sum().reset_index()
+    temp_df['x_axis'] = temp_df['month'].astype('str') + '-' + temp_df['year'].astype('str')
+    fig, ax = plt.subplots()
+    ax.plot(temp_df['x_axis'], temp_df['amount'])
+
+    st.pyplot(fig)
 
 
 def load_investor_details(investor_):
