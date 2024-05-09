@@ -7,6 +7,7 @@ st.set_page_config(layout='wide', page_title='Startup Analysis')
 df = pd.read_csv('startup_cleaned.csv')
 # Data Cleaning -> Missing values should be taken care of:
 df['investors'] = df['investors'].fillna('Undisclosed')
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
 
 def load_investor_details(investor_):
@@ -24,6 +25,20 @@ def load_investor_details(investor_):
         fig, ax = plt.subplots()
         ax.bar(big_series.index, big_series.values)
         st.pyplot(fig)
+
+    with col2:
+        vertical_series = df[df['investors'].str.contains(investor_)].groupby('vertical')['amount'].sum()
+        st.subheader('Sectors Invested In')
+        fig1, ax1 = plt.subplots()
+        ax1.pie(vertical_series, labels=vertical_series.index)
+        st.pyplot(fig1)
+
+    df['year'] = df['date'].dt.year
+    yoy = df[df['investors'].str.contains(investor_)].groupby('year')['amount'].sum()
+    st.subheader('Year on Year Investments')
+    fig2, ax2 = plt.subplots()
+    ax2.plot(yoy.index, yoy.values)
+    st.pyplot(fig2)
 
 
 st.sidebar.title('Startup Funding Analysis')
